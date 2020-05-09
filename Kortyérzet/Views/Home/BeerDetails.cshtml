@@ -1,0 +1,52 @@
+﻿@model Kortyérzet.Models.BeerModel
+
+@{
+    ViewData["Title"] = "BeerDetails";
+}
+
+    <div class="row">
+        <div class="col-xs-2">
+            <a class="label" style="display: inline-block">
+                <img style="float:left" src="@Model.Logo" height="150" width="150">
+            </a>
+        </div>
+        <div class="col-xl-6">
+            <p style="font-size: xx-large">
+                <a href="@Url.Action("BeerDetails", "Home", new { id = Model.ID })">@Model.Name</a>
+            </p>
+            <p style="font-size: medium">@Model.Style</p>
+            <p>@Model.Description</p>
+            <div class="row">
+                <div class="col-xs-4 col-md-3 border bg-light border-left-0">@Model.ABV % ABV</div>
+                <div class="col-xs-4 col-md-3 border bg-light">@Model.IBU IBU</div>
+                <div class="col-xs-4 col-md-3 border bg-light">Rating: @Model.Rating</div>
+                <div class="col-xs-4 col-md-3 border bg-light border-right-0">@Model.TimesRated Ratings</div>
+            </div>
+        </div>
+        <div class="col-xs-2">
+            <div class="card" style="width: 18rem;">
+                <div class="card-body">
+                    <a href="#" class="btn btn-primary btn-block">@Model.Name</a>
+                    <p class="card-text">
+                        <img style="float:left;display: inline-block" src="@Model.Logo" height="50" width="50">
+                        @Model.Brewery
+                    </p>
+                    @Model.Style - Rating: @Model.Rating
+
+                </div>
+            </div>
+            <div class="card" style="width: 18rem;">
+                <div class="card-body">
+                    <a href="#" class="btn btn-primary btn-block">@Model.Name</a>
+                    <p class="card-text">
+                        <img style="float:left;display: inline-block" src="@Model.Logo" height="50" width="50">
+                        @Model.Brewery
+                    </p>
+                    @Model.Style - Rating: @Model.Rating
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+

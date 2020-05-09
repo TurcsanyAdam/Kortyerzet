@@ -1,0 +1,51 @@
+﻿DROP TABLE IF EXISTS beer;
+DROP TABLE IF EXISTS brewery;
+
+create table brewery (
+	brewery_ID SERIAL PRIMARY KEY,
+	brewery_name TEXT,
+	brewery_logo TEXT,
+	brewery_HQ TEXT,
+	brewery_desc TEXT,
+	brewery_beerCount INT,
+	brewery_rating INT,
+	brewery_timesRated INT,
+	brewery_checkin INT
+);
+create table beer (
+	beer_ID SERIAL PRIMARY KEY,
+	beer_name TEXT,
+	beer_logo TEXT,
+	beer_style TEXT,
+	beer_desc TEXT,
+	beer_rating INT,
+	beer_timesRated INT,
+	beer_checkin INT,
+	beer_abv DECIMAL(3,1),
+	beer_ibu INT,
+    brewery_ID INT REFERENCES brewery(brewery_ID) on DELETE CASCADE
+
+);
+insert into brewery (brewery_name, brewery_logo, brewery_HQ, brewery_desc, brewery_beerCount, brewery_rating, brewery_timesRated, brewery_checkin) values ('Mad Scientist', 'https://summer.cdn.shoprenter.hu/custom/summer/image/cache/w1000h1000wt1/Term%C3%A9kk%C3%A9pek/%C3%9Aj/__/mad%20scientist.jpg?lastmod=1585763441.1588180560', 'Budapest, Közép-Magyarország Hungary', 'Good at brewing beer. Bad at writing bios. Founded in 2016, based in Budapest, available all over Europe.', 2, 0, 0, 0);
+insert into brewery (brewery_name, brewery_logo, brewery_HQ, brewery_desc, brewery_beerCount, brewery_rating, brewery_timesRated, brewery_checkin) values ('HORIZONT Brewing', 'https://bpbw.hu/wp-content/uploads/2017/11/horizont_logo_new.jpg', 'Budapest, Közép-Magyarország Hungary', 'Who''s the #GentleBastard now? Uncompromising KRAFT beers from Budapest (Hungary).', 1, 0, 0, 0);
+insert into brewery (brewery_name, brewery_logo, brewery_HQ, brewery_desc, brewery_beerCount, brewery_rating, brewery_timesRated, brewery_checkin) values ('Fehér Nyúl', 'https://budakornyekisorfesztival.com/images/logo/fehernyul-logo.jpg', 'Budapest, Közép-Magyarország Hungary', 'Ez a sör kulcs. A Fehér Nyúl kulcsa, amely kaput nyit számodra a Túloldalra. Bízd magad a Nyúlra, és lépj át egy olyan világba, ahol bármi megtörténhet.', 1, 0, 0, 0);
+insert into brewery (brewery_name, brewery_logo, brewery_HQ, brewery_desc, brewery_beerCount, brewery_rating, brewery_timesRated, brewery_checkin) values ('MONYO Brewing Co.', 'https://bpbw.hu/wp-content/uploads/2017/11/monyo_new.jpg', 'Budapest, Közép-Magyarország Hungary', 'MONYO Brewing Co. was founded in 2014 to revolutionize the Hungarian craft beer brewing', 1, 0, 0, 0);
+insert into brewery (brewery_name, brewery_logo, brewery_HQ, brewery_desc, brewery_beerCount, brewery_rating, brewery_timesRated, brewery_checkin) values ('FIRST The Craft Beer Co.', 'https://isic.hu/wp-content/uploads/2020/02/firstcraftbeer-1.jpg', 'Budapest, Közép-Magyarország Hungary', 'The Kurucz brother established the FIRST The Craft Beer Co. in 2017, which is the first new wave open-view brewery in Hungary.', 1, 0, 0, 0);
+insert into brewery (brewery_name, brewery_logo, brewery_HQ, brewery_desc, brewery_beerCount, brewery_rating, brewery_timesRated, brewery_checkin) values ('Reketye Brewing Co.', 'https://untappd.akamaized.net/site/brewery_logos_hd/brewery-155341_f1e74_hd.jpeg', 'Nagytarcsa, Közép-Magyarország Hungary', 'Kisüzemi sörfőzdénkben válogatott alapanyagokból, modern technológiával készítjük söreinket.',1, 0, 0, 0);
+insert into brewery (brewery_name, brewery_logo, brewery_HQ, brewery_desc, brewery_beerCount, brewery_rating, brewery_timesRated, brewery_checkin) values ('Zip''s Brewhouse', 'https://szuretlen.hu/upload/brewery/31.jpg', 'Miskolc, Alföld és Észak Hungary', 'Saját teremtéskönyvünk első lapja a zip''s BEER & Restauranté, egy mindenki számára elérhető látványsörfőzdével operáló étteremé, a #sörgasztronómia akadémiájáé', 2, 0, 0, 0);
+insert into brewery (brewery_name, brewery_logo, brewery_HQ, brewery_desc, brewery_beerCount, brewery_rating, brewery_timesRated, brewery_checkin) values ('Dimbo Lab', 'https://onebeer.hu/wp-content/uploads/Dimbo.jpg', 'Hungary', 'Cutting edge craft beer engineering from Hungary. Or something like that. ', 1, 0, 0, 0);
+insert into brewery (brewery_name, brewery_logo, brewery_HQ, brewery_desc, brewery_beerCount, brewery_rating, brewery_timesRated, brewery_checkin) values ('HopTop Brewery', 'https://www.hoptopbrewery.com/images/hoptop-blog-logo.png', 'Budapest, Közép-Magyarország Hungary', 'Egyszerűen söröket főzünk.', 1, 0, 0, 0);
+insert into brewery (brewery_name, brewery_logo, brewery_HQ, brewery_desc, brewery_beerCount, brewery_rating, brewery_timesRated, brewery_checkin) values ('Yeast Side', 'https://untappd.akamaized.net/site/brewery_logos_hd/brewery-329584_43151_hd.jpeg', 'Jászapáti, Közép-Magyarország Hungary', 'Régmúltú sörfőzde megújult arculattal, fiatalos lendülettel.', 1, 0, 0, 0);
+
+insert into beer (beer_name, beer_logo, beer_style, beer_desc, beer_rating, beer_timesRated, beer_checkin, beer_abv, beer_ibu, brewery_ID) values ('Liquid Cocaine', 'https://madscientist.hu/wp-content/uploads/2020/02/DSC6194.jpg', 'IPA', 'Egy korsó sörben 10 gramm komló van, és annyi alkohol, mint két feles pálinkában.', 0, 0, 0, 9, 120, 1);
+insert into beer (beer_name, beer_logo, beer_style, beer_desc, beer_rating, beer_timesRated, beer_checkin, beer_abv, beer_ibu, brewery_ID) values ('Tokyo Lemonade', 'https://madscientist.hu/wp-content/uploads/2019/07/Tokyo-Lemonade-new-label.png', 'Witbier', 'Belgian witbier with yuzu, coriander seeds and sweet orange peel.', 0, 0, 0, 4.5, 12, 1);
+insert into beer (beer_name, beer_logo, beer_style, beer_desc, beer_rating, beer_timesRated, beer_checkin, beer_abv, beer_ibu, brewery_ID) values ('Hazy Queen', 'https://www.bortarsasag.hu/productimage.php?pid=28571', 'NEIPA', 'Selymes kortyérzet, bőségesen hidegkomlózva Galaxy, Citra és Mosaic komlóval', 0, 0, 0, 6, 45, 2);
+insert into beer (beer_name, beer_logo, beer_style, beer_desc, beer_rating, beer_timesRated, beer_checkin, beer_abv, beer_ibu, brewery_ID) values ('Fehér Nyúl Stout', 'https://csakajosor.cdn.shoprenter.hu/custom/csakajosor/image/data/feher_nyul_stout.jpg?lastmod=1588362465.1482236000', 'Stout', 'Ezt a krémes, könnyed, kávés, étcsokis jegyeket idéző, zabos sört minden életigenlőnek nyugodt szívvel ajánljuk', 0, 0, 0, 4.5, 30, 3);
+insert into beer (beer_name, beer_logo, beer_style, beer_desc, beer_rating, beer_timesRated, beer_checkin, beer_abv, beer_ibu, brewery_ID) values ('Bipolar Bear', 'https://www.monyobrewing.com/image/cache/catalog/product/core/bipolar_bear-1000x1000.png', 'White IPA', 'A végeredmény egy kellemesen citrusos, gyümölcsösen észteres és balanszosan keserű ivósör lett', 0, 0, 0, 6.1, 40, 4);
+insert into beer (beer_name, beer_logo, beer_style, beer_desc, beer_rating, beer_timesRated, beer_checkin, beer_abv, beer_ibu, brewery_ID) values ('Yemaya', 'https://summer.cdn.shoprenter.hu/custom/summer/image/cache/w1000h1000wt1/product/first-yemaya.jpg?lastmod=1588171276.1588180560', 'DIPA', 'Víz nélkül nincs élet. Ez az évezredes tudás hívta elő Afrika mélyéről Yemaya-t, a víz teremtő erejének úrnőjét.', 0, 0, 0, 8.2, 58, 5);
+insert into beer (beer_name, beer_logo, beer_style, beer_desc, beer_rating, beer_timesRated, beer_checkin, beer_abv, beer_ibu, brewery_ID) values ('Lacto Acid Bacteria', 'https://reketye.com/wp-content/uploads/2018/05/lab-4.png', 'Gose', 'Egy kicsit csavartunk a dolgon, hiszen az eredeti gose kevésbé komlózott és talán markánsabban sós.', 0, 0, 0, 4.5, 20, 6);
+insert into beer (beer_name, beer_logo, beer_style, beer_desc, beer_rating, beer_timesRated, beer_checkin, beer_abv, beer_ibu, brewery_ID) values ('Pék Sör', 'https://summer.cdn.shoprenter.hu/custom/summer/image/cache/w1000h1000wt1/product/zips-peksor.png?lastmod=1588171274.1588180560', 'Toast Ale', 'Easy drinking Toast Ale, with the taste of sourdough bread.', 0, 0, 0, 4.5, 20, 7);
+insert into beer (beer_name, beer_logo, beer_style, beer_desc, beer_rating, beer_timesRated, beer_checkin, beer_abv, beer_ibu, brewery_ID) values ('Alphawolf', 'https://shop.zips.hu/wp-content/uploads/2018/02/zips_webaruhaz_alphawolf.jpg', 'DIPA', 'Páratlan harmónia az amerikai Mosaic komló citrusossága, és a Styrian Wolf vaniliás, kókuszos összetevői közöt', 0, 0, 0, 7, 75, 7);
+insert into beer (beer_name, beer_logo, beer_style, beer_desc, beer_rating, beer_timesRated, beer_checkin, beer_abv, beer_ibu, brewery_ID) values ('Wine Flu', 'https://summer.cdn.shoprenter.hu/custom/summer/image/data/product/dimbolab-wineflu.png?lastmod=1588165564.1580203359', 'Sour IPA', 'A slightly sour IPA fermented with riesling must and double dry hopped with nelson sauvin and amarillo', 0, 0, 0, 7.5, 56, 8);
+insert into beer (beer_name, beer_logo, beer_style, beer_desc, beer_rating, beer_timesRated, beer_checkin, beer_abv, beer_ibu, brewery_ID) values ('Ceylon Buddy', 'https://summer.cdn.shoprenter.hu/custom/summer/image/cache/w1000h1000wt1/product/hoptop-ceylonbuddy.png?lastmod=1588435254.1588180560', 'Tea infused DIPA', 'An imperial IPA with full body. Orange peels, sunflower petals and Ceylon tea provide complexity, but does not push over the balance.', 0, 0, 0, 9.1, 75, 9);
+insert into beer (beer_name, beer_logo, beer_style, beer_desc, beer_rating, beer_timesRated, beer_checkin, beer_abv, beer_ibu, brewery_ID) values ('Ultraside (Pineapple Version)', 'https://summer.cdn.shoprenter.hu/custom/summer/image/cache/w1000h1000wt1/product/yeastside-ultraside.png?lastmod=1588420419.1588180560', 'DIPA', 'Egy erős, ananászos Dupla IPA', 0, 0, 0, 9, 20, 10);
