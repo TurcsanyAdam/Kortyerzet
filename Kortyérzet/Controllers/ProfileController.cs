@@ -14,10 +14,8 @@ namespace Kortyérzet.Controllers
     [Authorize]
     public class ProfileController : Controller
     {
-        private readonly IDataLoad _loader;
-        public ProfileController(IDataLoad loader)
+        public ProfileController()
         {
-            _loader = loader;
         }
 
         public IActionResult ProfileDetails()

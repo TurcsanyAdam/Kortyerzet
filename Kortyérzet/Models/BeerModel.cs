@@ -1,7 +1,10 @@
-﻿using System;
+﻿using Kortyérzet.Domain;
+using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace Kortyérzet.Models
 {
@@ -15,23 +18,28 @@ namespace Kortyérzet.Models
         public int Rating { get; set; }
         public int TimesRated { get; set; }
         public int CheckIn { get; set; }
-        public int ABV { get; set; }
+        public float ABV { get; set; }
         public int IBU { get; set; }
-        public string Brewery { get; set; }
+        public Brewery Brewery { get; set; }
 
-        public BeerModel(int id, string name, string logo, string style, string description, int rating, int timesRated, int checkIn, int abv, int ibu, string brewery)
+        public BeerModel(Beer beer, Brewery brewery)
         {
-            ID = id;
-            Name = name;
-            Logo = logo;
-            Style = style;
-            Description = description;
-            Rating = rating;
-            TimesRated = timesRated;
-            CheckIn = checkIn;
-            ABV = abv;
-            IBU = ibu;
+            ID = beer.ID;
+            Name = beer.Name;
+            Logo = beer.Logo;
+            Style = beer.Style;
+            Description = beer.Description;
+            Rating = beer.Rating;
+            TimesRated = beer.TimesRated;
+            CheckIn = beer.CheckIn;
+            ABV = beer.ABV;
+            IBU = beer.IBU;
             Brewery = brewery;
+        }
+
+        public BeerModel()
+        {
+
         }
 
     }

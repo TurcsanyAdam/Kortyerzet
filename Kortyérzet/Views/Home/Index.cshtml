@@ -4,16 +4,17 @@
     ViewData["Title"] = "Home Page";
 }
 
-<head>
-    <meta charset="utf-8">
-    <script src="~/js/site.js"></script>
-</head>
+    <head>
+        <meta charset="utf-8">
+        <script src="~/js/site.js"></script>
+
+    </head>
 
 <div>
     <a>Styles: </a>
     <select class="selectpicker" id="styleDDL" onchange="selectValue();">
         <option>Select all styles</option>
-        @foreach (var style in Kortyérzet.Domain.DataBaseLoader.BeerStyles)
+        @foreach (var style in Kortyérzet.Services.SqlBeerService.AllStyles)
         {
             <option>@style</option>
 
@@ -35,7 +36,7 @@
             <p style="font-size: xx-large;margin-bottom: 2px">
                 <a href="@Url.Action("BeerDetails", "Home", new { id = beer.ID })">@beer.Name</a>
             </p>
-            <p style="font-size: x-large;margin-bottom: 2px">@beer.Brewery</p>
+            <p style="font-size: x-large;margin-bottom: 2px">@beer.Brewery.Name</p>
             <p style="font-size: large;margin-bottom: 2px">@beer.Style</p>
 
             <p>@beer.Description</p>

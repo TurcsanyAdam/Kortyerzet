@@ -46,7 +46,7 @@ function onSearchResultReceived(response) {
         const pELname = document.createElement("p");
         pELname.textContent = `${beer.name}`;
         const pELbrew = document.createElement("p");
-        pELbrew.textContent = `${beer.brewery}`;
+        pELbrew.textContent = `${beer.brewery.name}`;
         const pELstyle = document.createElement("p");
         pELstyle.textContent = `${beer.style}`;
         const pELdesc = document.createElement("p");

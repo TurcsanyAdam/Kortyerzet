@@ -1,17 +1,88 @@
-﻿
+﻿@model Kortyérzet.ViewModels.RegistrationViewModel
 @{
-    ViewData["Title"] = "Login";
+    ViewData["Title"] = "LoginRegister";
 }
 
-<div class="text-center">
-    <h1 class="display-4"> Login </h1>
-    <form method="post">
-        <label> Email</label>
-        <input type="text" name="email" required />
-        <label> Password</label>
-        <input type="password" name="password" required />
-        <button>Submit</button>
-    </form>
+<script src="~/js/login.js"></script>
+<script src="~/js/site.js"></script>
 
+
+<div class="col-xl8 card container mt-5" id="registrationCard">
+    <h4 class="card-header text-center">Registration</h4>
+
+    <form enctype="multipart/form-data" asp-controller="Account" asp-action="Registration" method="post" class="mt-3 card-body">
+        <div class="form-group row">
+            <label asp-for="Username" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                <input asp-for="Username" class="form-control" placeholder="Username" />
+                <span asp-validation-for="Username" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label asp-for="Email" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                <input asp-for="Email" class="form-control" placeholder="Example@egmail.com" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label asp-for="Password" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                <input asp-for="Password" class="form-control" placeholder="Password" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label asp-for="PasswordAgain" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                <input asp-for="PasswordAgain" class="form-control" placeholder="Password Again" />
+                <span asp-validation-for="PasswordAgain" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div asp-validation-summary="All" class="text-danger"></div>
+
+        <div class="form-group row text-center">
+            <div class="col-sm">
+                <button class="btn btn-primary m-2" type="submit">Create</button>
+            </div>
+        </div>
+
+        <div class="card-footer mt-3 font-weight-bold text-center">
+            <span>Already have an account? Log in <a href="#" onclick="ShowLoginForm();">here</a>.</span>
+        </div>
+    </form>
+</div>
+<div class="col-xl-8 card container mt-5" id="loginCard">
+    <h4 class="card-header text-center">Login</h4>
+
+    <form enctype="multipart/form-data" asp-controller="Account" asp-action="Login" method="post" class="mt-3 card-body">
+        <div class="form-group row">
+            <label asp-for="Email" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                <input asp-for="Email" class="form-control" placeholder="Example@egmail.com" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label asp-for="Password" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                <input asp-for="Password" class="form-control" placeholder="Password" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div asp-validation-summary="All" class="text-danger"></div>
+
+        <div class="form-group row text-center">
+            <div class="col-sm">
+                <button class="btn btn-success m-2" type="submit" onclick="GetSchedules();">Login</button>
+            </div>
+        </div>
+
+        <div class="card-footer mt-3 font-weight-bold text-center">
+            <span>Still don't have an account? Register <a href="#" onclick="ShowRegistrationForm();">here</a>.</span>
+        </div>
+    </form>
 </div>
 
