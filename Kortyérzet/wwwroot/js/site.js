@@ -9,13 +9,14 @@ function selectValue() {
     var xhr = new XMLHttpRequest();
 
     xhr.open('POST', '/Home/Style', true);
-    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=utf-8');
     xhr.onreadystatechange = function () {
         if (xhr.readyState == 4 && xhr.status == 200) {
             onSearchResultReceived(xhr.responseText);
         }
     }
-    xhr.send(`chosenStyle=${chosenStyle}`);
+    var data = new FormData()
+    data.append("chosenStyle", chosenStyle)
+    xhr.send(data);
 
 }
 function onSearchResultReceived(response) {

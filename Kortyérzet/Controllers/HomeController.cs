@@ -15,6 +15,7 @@ using System.Web;
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
 using System.Globalization;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Kortyérzet.Controllers
 {
@@ -24,21 +25,32 @@ namespace Kortyérzet.Controllers
         private readonly IBeerService _beerService;
         private readonly IBreweryService _breweryService;
         private readonly IStorageService _storageService;
+        private readonly ICheckinService _checkinService;
 
-        public HomeController(IUsersService userService, IBeerService beerService, IBreweryService breweryService, IStorageService storageService)
+        public HomeController(IUsersService userService, IBeerService beerService, IBreweryService breweryService, IStorageService storageService, ICheckinService checkinService)
         {
             _userService = userService;
             _beerService = beerService;
             _breweryService = breweryService;
             _storageService = storageService;
+            _checkinService = checkinService;
         }
 
         public IActionResult Index()
         {
+
             List<Beer> beerList = _beerService.GetAll();
             List<BeerModel> beerModeList = new List<BeerModel>();
             foreach (Beer beer in beerList)
             {
+                float[] ratings = _beerService.GetRating(beer.ID);
+                beer.Rating = ratings[1] / ratings[0];
+                beer.TimesRated = Convert.ToInt32(ratings[0]);
+                if (ratings[1] != 0)
+                {
+                    _beerService.UpdateRating(ratings);
+
+                }
                 Brewery brewery = _breweryService.GetOne(beer.BreweryID);
                 BeerModel beerModel = new BeerModel(beer, brewery);
                 beerModeList.Add(beerModel);
@@ -58,14 +70,30 @@ namespace Kortyérzet.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-
+        [Authorize(Roles = "admin")]
         [HttpGet]
         public IActionResult BeerDetails(int id)
         {
+
             Beer beer = _beerService.GetOne(id);
             Brewery brewery = _breweryService.GetOne(beer.BreweryID);
-            BeerModel beerModel = new BeerModel(beer, brewery);
+            List<Checkin> checkins = _checkinService.GetAllByBeerID(id);
 
+
+            float[] ratings = _beerService.GetRating(beer.ID);
+            beer.Rating = ratings[1] / ratings[0];
+            beer.TimesRated = Convert.ToInt32(ratings[0]);
+            if (ratings[1] != 0)
+            {
+                _beerService.UpdateRating(ratings);
+
+            }
+            foreach (Checkin checkin in checkins)
+            {
+                checkin.User = _userService.GetOne(checkin.UserID);
+            }
+            BeerModel beerModel = new BeerModel(beer, brewery);
+            beerModel.Checkins = checkins;
 
             return View(beerModel);
         }
@@ -88,13 +116,14 @@ namespace Kortyérzet.Controllers
                 string newCheckInRatingString = Convert.ToString(newCheckInData[2].Value);
                 float newCheckInRating = float.Parse(newCheckInRatingString.Trim(), CultureInfo.InvariantCulture.NumberFormat);
                 Checkin checkin = new Checkin(userId, beerID, newCheckInText, newCheckInRating);
+                string fileName = null;
 
                 if (Request.Form.Files.Count > 0)
                 {
                     IFormFile file = Request.Form.Files[0];
                     if (file.Length > 0)
                     {
-                        var fileName = Path.GetFileName(file.FileName);
+                        fileName = Path.GetFileName(file.FileName);
 
                         using Stream imageStream = file.OpenReadStream();
                         _storageService.Save(fileName, imageStream);
@@ -102,8 +131,12 @@ namespace Kortyérzet.Controllers
 
                     }
 
-                    return RedirectToAction("Index");
                 }
+
+                _checkinService.InsertCheckin(userId,beerID,newCheckInText,newCheckInRating,fileName);
+                _beerService.UpdateRating(newCheckInRating, beerID);
+                return RedirectToAction("Index");
+
             }
 
             return View();
@@ -113,19 +146,19 @@ namespace Kortyérzet.Controllers
             string chosenSytle = Request.Form["chosenStyle"];
 
             List<Beer> beerList = _beerService.GetAllByStyle(chosenSytle);
-            List<BeerModel> beerModeList = new List<BeerModel>();
+            List<BeerModel> beerModelList = new List<BeerModel>();
             foreach(Beer beer in beerList)
             {
                 Brewery brewery = _breweryService.GetOne(beer.BreweryID);
                 BeerModel beerModel = new BeerModel(beer, brewery);
-                beerModeList.Add(beerModel);
+                beerModelList.Add(beerModel);
 
             }
-            return Json(beerModeList);
+            return Json(beerModelList);
         }
         public IActionResult Recommendation()
         {
-            string style = Convert.ToString(Request.Form["chosenStyle"]);
+            string style = Request.Form["chosenStyle"];
             int breweryID = Convert.ToInt32(Request.Form["breweryID"]);
             int beerID = Convert.ToInt32(Request.Form["beerID"]);
 
@@ -165,6 +198,49 @@ namespace Kortyérzet.Controllers
 
 
             return Json(beerModelList);
+        }
+
+        public IActionResult NewBeerOrBrewery()
+        {
+            List<Brewery> breweries = _breweryService.GetAll();
+            return View(breweries);
+
+        }
+        public IActionResult NewBeer()
+        {
+            if (ModelState.IsValid)
+            {
+                var newBeerData = Request.Form.ToList();
+                var userId = Convert.ToInt32(HttpContext.User.FindFirstValue("ID"));
+                string newBeerName = Convert.ToString(newBeerData[0].Value);
+                string fileName = null;
+                string newBeerStyle = Convert.ToString(newBeerData[1].Value);
+                string newBeerDesc = Convert.ToString(newBeerData[3].Value);
+                float newBeerBreweryABV = float.Parse(newBeerData[4].Value, CultureInfo.InvariantCulture.NumberFormat);
+                int newBeerBreweryIBU = Convert.ToInt32(newBeerData[5].Value);
+                int newBeerBreweryID = _breweryService.GetOne(Convert.ToString(newBeerData[2].Value)).ID;
+
+
+
+                if (Request.Form.Files.Count > 0)
+                {
+                    IFormFile file = Request.Form.Files[0];
+                    if (file.Length > 0)
+                    {
+                        fileName = Path.GetFileName(file.FileName);
+
+                        using Stream imageStream = file.OpenReadStream();
+                        _storageService.Save(fileName, imageStream);
+
+                    }
+
+                }
+                _beerService.InsertBeer(newBeerName, fileName, newBeerStyle, newBeerDesc, newBeerBreweryABV, newBeerBreweryIBU, newBeerBreweryID);
+                return RedirectToAction("Index");
+
+            }
+
+            return View();
         }
     }
 }

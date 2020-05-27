@@ -11,7 +11,17 @@
 <div class="row">
     <div class="col-xs-2">
         <a class="label" style="display: inline-block">
-            <img style="float:left" src="@Model.Logo" height="150" width="150">
+            @if (Model.Logo.StartsWith("http"))
+            {
+                <img style="float:left" src="@Model.Logo" height="150" width="150">
+
+
+            }
+            else
+            {
+                <img src="~/uploads/@Model.Logo" height="150" width="150">
+
+            }
         </a>
     </div>
     <div class="col-xl-6">
@@ -21,22 +31,52 @@
         <p style="font-size: x-large;margin-bottom: 2px">@Model.Brewery.Name</p>
         <p style="font-size: large;margin-bottom: 2px">@Model.Style</p>
         <p>@Model.Description</p>
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
-            Check In
-        </button>
+        @if (Context.User.Identity.IsAuthenticated)
+        {
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
+                Check In
+            </button>
+        }
+
         <div class="row">
             <div class="col-xs-4 col-md-3 border bg-light border-left-0">@Model.ABV % ABV</div>
             <div class="col-xs-4 col-md-3 border bg-light">@Model.IBU IBU</div>
-            <div class="col-xs-4 col-md-3 border bg-light">Rating: @Model.Rating</div>
+            <div class="col-xs-4 col-md-3 border bg-light">Rating: @Math.Round(Model.Rating, 2)</div>
             <div class="col-xs-4 col-md-3 border bg-light border-right-0">@Model.TimesRated Ratings</div>
         </div>
     </div>
+
     <div id="beer-recommendation" class="col-xs-2">
         <script type="text/javascript">
                 selectBeers("@Model.Style","@Model.Brewery.ID", "@Model.ID");
         </script>
     </div>
 </div>
+@foreach (Kortyérzet.Domain.Checkin checkin in Model.Checkins)
+{
+    <div class="row">
+        <div class="col-xs-2">
+            <a class="label" style="display: inline-block">
+                @if (checkin.Img != "null")
+                {
+                    <img style="float:left" src="~/uploads/@checkin.Img" height="150" width="150">
+
+                }
+                else
+                {
+                    <img style="float:left" src="@Model.Logo" height="150" width="150">
+                }
+            </a>
+        </div>
+        <div class="col-xl-6">
+            <p style="font-size: x-large;margin-bottom: 2px">@checkin.User.Username is drinking @Model.Name by @Model.Brewery.Name </p>
+            <p style="font-size: large;margin-bottom: 2px">@checkin.Comment</p>
+
+            <p style="font-size: large;margin-bottom: 2px">@checkin.Rating </p>
+        </div>
+    </div>
+
+}
 
 <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -57,7 +97,7 @@
                         <textarea class="form-control" name="checkInText" rows="3" placeholder="Tell us your thoughts!" maxlength="60"></textarea>
                     </div>
                     <div class="slidecontainer">
-                        <input type="range" min="0" max="5" value="0" step="0.25" class="slider" id="myRange"name="myRange">
+                        <input type="range" min="0" max="5" value="0" step="0.25" class="slider" id="myRange" name="myRange">
                         <p><span id="checkInRating"></span></p>
                     </div>
                     <div class="form-group">
@@ -70,7 +110,7 @@
                     <input type="submit" value="Save" class="btn btn-primary" />
                 </div>
             }
-            </div>
+        </div>
     </div>
 </div>
 <script>

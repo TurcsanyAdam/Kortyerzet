@@ -15,12 +15,13 @@ namespace Kortyérzet.Models
         public string Logo { get; set; }
         public string Style { get; set; }
         public string Description { get; set; }
-        public int Rating { get; set; }
+        public float Rating { get; set; }
         public int TimesRated { get; set; }
         public int CheckIn { get; set; }
         public float ABV { get; set; }
         public int IBU { get; set; }
         public Brewery Brewery { get; set; }
+        public List<Checkin> Checkins { get; set; }
 
         public BeerModel(Beer beer, Brewery brewery)
         {

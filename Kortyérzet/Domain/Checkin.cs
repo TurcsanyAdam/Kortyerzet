@@ -8,6 +8,7 @@ namespace Kortyérzet.Domain
     public class Checkin
     {
         public int UserID { get; set; }
+        public User User{ get; set; }
         public int BeerID { get; set; }
         public string Comment { get; set; }
         public float Rating { get; set; }
@@ -19,6 +20,14 @@ namespace Kortyérzet.Domain
             BeerID = beerID;
             Comment = comment;
             Rating = rating;
+        }
+        public Checkin(int userID, int beerID, string comment, float rating, string img)
+        {
+            UserID = userID;
+            BeerID = beerID;
+            Comment = comment;
+            Rating = rating;
+            Img = img;
         }
     }
 

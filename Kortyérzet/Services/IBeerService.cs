@@ -13,7 +13,12 @@ namespace Kortyérzet.Services
         List<Beer> GetAllByStyle(string style);
         List<Beer> GetAllByBrewery(int breweryID);
         void GetAllStyle();
+        void InsertBeer(string beerName, string beerLogo, string beerStyle, string beerDesc, float beerABV, int beerIBU, int breweryID);
         Beer GetOne(int id);
         Beer GetOne(string beerName);
+        float[] GetRating (int id);
+        void UpdateRating(float[] ratings);
+
+        void UpdateRating(float rating, int id);
     }
 }

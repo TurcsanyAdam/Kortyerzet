@@ -43,7 +43,13 @@ function onRecommendationReceived(response) {
         const imgEL = document.createElement("img");
         imgEL.style.float = "left"
         imgEL.style.display = "inline-block"
-        imgEL.src = `${beer.logo}`
+        if ((beer.logo).startsWith("http")) {
+            imgEL.src = `${beer.logo}`
+        }
+        else {
+            imgEL.src = `/uploads/${beer.logo}`
+        }
+
         imgEL.height = 50;
         imgEL.weight = 50;
 

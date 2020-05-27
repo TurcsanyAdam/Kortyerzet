@@ -1,0 +1,136 @@
+﻿@model IEnumerable<Kortyérzet.Domain.Brewery>
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+<head>
+    <meta charset="utf-8">
+    <script src="~/js/beerRecommend.js"></script>
+</head>
+<h1>Hey Mr.Admin, would you like to add a new beer or brewery to the database?</h1>
+
+<div class="row">
+    <div class="col-xl-6">
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#newBeer">
+            New beer
+        </button>
+    </div>
+    <div class="col-xl-6">
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#newBrewery">
+            New brewery
+        </button>
+    </div>
+</div>
+
+<div class="modal fade" id="newBeer" tabindex="-1" role="dialog" aria-labelledby="newBeerTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="newBeerTitle">What beer would you like to add?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            @using (Html.BeginForm("NewBeer", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                <div class="modal-body">
+                    <div class="form-group">
+                        <textarea class="form-control" name="newBeerName" rows="1" placeholder="What's the name of this beer?" maxlength="20" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <textarea class="form-control" name="newBeerStyle" rows="1" placeholder="Is it an IPA? Or a Gose? Tell us the style" maxlength="20" required></textarea>
+                    </div>
+                    <div class="dropdown">
+                        <select class="selectpicker" id="styleDDL" required">
+                            @foreach (Kortyérzet.Domain.Brewery brewery in Model)
+                            {
+                                <option>@brewery.Name</option>
+
+                            }
+                        </select>
+                    </div>
+                    <div class="hidden-formResult">
+                        <input type="hidden" id="hiddenFormResult" name="hiddenFormResult" value="">
+                    </div>
+                    <div class="form-group">
+                        <textarea class="form-control" name="newBeerDesc" rows="3" placeholder="Give a short description!" required maxlength="60"></textarea>
+                    </div>
+                    <div class="slidecontainer">
+                        <input type="range" min="0" max="15" value="0" step="0.1" class="slider" id="myRangeABV" name="myRangeABV">
+                        <p><span id="newBeerABV"></span></p>
+                    </div>
+                    <div class="slidecontainer">
+                        <input type="range" min="0" max="100" value="0" step="1" class="slider" id="myRangeIBU" name="myRangeIBU">
+                        <p><span id="newBeerIBU"></span></p>
+                    </div>
+                    <div class="form-group">
+                        <input type="file" name="FileUpload" id="FileUpload" required runat="server" />
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="newBrewery" tabindex="-1" role="dialog" aria-labelledby="newBreweryTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="newBreweryTitle">What beer would you like to add?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            @using (Html.BeginForm("NewBrewery", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                <div class="modal-body">
+                    <div class="form-group">
+                        <textarea class="form-control" name="newBreweryName" rows="1" placeholder="What's the name of this brewery?" required maxlength="20"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <textarea class="form-control" name="newBreweryHQ" rows="1" placeholder="Where is it located?" required maxlength="20"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <textarea class="form-control" name="newBreweryDesc" rows="3" placeholder="Give a short description about the brewery!" required maxlength="60"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <input type="file" name="FileUpload" id="FileUpload" runat="server" required />
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<script>
+    var slider = document.getElementById("styleDDL");
+    var output = document.getElementById("hiddenFormResult");
+    output.value = slider.value;
+
+    slider.onchange = function () {
+        output.value = this.value;
+    }
+    var sliderABV = document.getElementById("myRangeABV");
+    var outputABV = document.getElementById("newBeerABV");
+    outputABV.innerHTML = `ABV: ${sliderABV.value}`;
+
+    sliderABV.oninput = function () {
+        outputABV.innerHTML = `ABV: ${this.value}`;
+    }
+    var sliderIBU = document.getElementById("myRangeIBU");
+    var outputIBU = document.getElementById("newBeerIBU");
+    outputIBU.innerHTML = `IBU: ${sliderIBU.value}`;
+
+    sliderIBU.oninput = function () {
+        outputIBU.innerHTML = `IBU: ${this.value}`;
+    }
+</script>

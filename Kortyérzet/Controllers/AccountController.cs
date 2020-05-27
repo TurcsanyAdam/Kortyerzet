@@ -68,9 +68,11 @@ namespace Kortyérzet.Controllers
                                     new ClaimsPrincipal(new ClaimsIdentity(new List<Claim>
                                     {
                         new Claim("ID", user.ID.ToString()),
+                        new Claim(ClaimTypes.Role, user.Role),
                         new Claim("Username", user.Username),
                                     }, CookieAuthenticationDefaults.AuthenticationScheme)),
                                     new AuthenticationProperties());
+
 
                 return RedirectToAction("Index", "Home");
             }

@@ -84,12 +84,18 @@ namespace Kortyérzet
             services.AddControllersWithViews();
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options => options.EventsType = typeof(CustomCookieAuthenticationEvents));
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("Admin", policy =>
+                                  policy.RequireClaim("Role", "admin"));
+            });
             services.AddScoped<CustomCookieAuthenticationEvents>();
 
             services.AddScoped<IUsersService, SqlUserService>();
             services.AddScoped<IBeerService, SqlBeerService>();
             services.AddScoped<IBreweryService, SqlBreweryService>();
             services.AddScoped<IUsersService, SqlUserService>();
+            services.AddScoped<ICheckinService, SqlCheckinService>();
             services.AddScoped<IDbConnection>(_ =>
             {
                 var connection = new NpgsqlConnection(connectionString);
@@ -97,10 +103,6 @@ namespace Kortyérzet
                 return connection;
             });
             services.AddSingleton(typeof(IStorageService), new FileStorageService(uploadsDirectory));
-            services.AddMvc(options =>
-            {
-                options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
-            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

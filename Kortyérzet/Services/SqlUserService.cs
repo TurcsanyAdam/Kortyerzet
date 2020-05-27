@@ -32,7 +32,7 @@ namespace Kortyérzet.Services
         public User GetOne(int userid)
         {
             using var command = _connection.CreateCommand();
-            command.CommandText = "SELECT * FROM users WHERE userid = @userid";
+            command.CommandText = "SELECT * FROM users WHERE user_id = @userid";
 
             var param = command.CreateParameter();
             param.ParameterName = "userid";
