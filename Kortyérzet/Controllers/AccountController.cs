@@ -16,10 +16,14 @@ namespace Kortyérzet.Controllers
     public class AccountController : Controller
     {
         private readonly IUsersService _userService;
+        private readonly ILoggerService _loggerService;
 
-        public AccountController(IUsersService usersService )
+
+        public AccountController(IUsersService usersService, ILoggerService loggerService )
         {
             _userService = usersService;
+            _loggerService = loggerService;
+
         }
 
         [HttpGet]
@@ -28,9 +32,21 @@ namespace Kortyérzet.Controllers
             return View();
 
         }
-        public IActionResult Registration()
+        public IActionResult Registration(RegistrationViewModel model)
         {
-            return View();
+            if (!Utility.IsValidEmail(model.Email))
+            {
+                return RedirectToAction("Registration", "Account");
+            }
+
+            _userService.Register(model.Username, model.Password, model.Email, "user");
+
+            User user = _userService.GetOne(model.Email);
+            _loggerService.LogActivity(user.ID, "User registeration ", DateTime.Now);
+
+
+
+            return RedirectToAction("Index", "Home");
 
         }
         public IActionResult RegistrationComplete([FromForm]string username, [FromForm]string email, [FromForm] string passwordA)
@@ -67,13 +83,14 @@ namespace Kortyérzet.Controllers
                                     CookieAuthenticationDefaults.AuthenticationScheme,
                                     new ClaimsPrincipal(new ClaimsIdentity(new List<Claim>
                                     {
+                        new Claim("Email", user.Email),
                         new Claim("ID", user.ID.ToString()),
                         new Claim(ClaimTypes.Role, user.Role),
                         new Claim("Username", user.Username),
                                     }, CookieAuthenticationDefaults.AuthenticationScheme)),
                                     new AuthenticationProperties());
 
-
+                _loggerService.LogActivity(user.ID, $"New login from user {user.Username}", DateTime.Now);
                 return RedirectToAction("Index", "Home");
             }
             else

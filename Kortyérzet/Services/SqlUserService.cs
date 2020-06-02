@@ -45,7 +45,7 @@ namespace Kortyérzet.Services
         public User GetOne(string email)
         {
             using var command = _connection.CreateCommand();
-            command.CommandText = $"SELECT * FROM users WHERE email = '{email}'";
+            command.CommandText = $"SELECT * FROM users WHERE user_email = '{email}'";
 
             using var reader = command.ExecuteReader();
             reader.Read();
@@ -102,7 +102,7 @@ namespace Kortyérzet.Services
             userNameParam.Value = userName;
             var passwordParam = command.CreateParameter();
             passwordParam.ParameterName = "password";
-            passwordParam.Value = password;
+            passwordParam.Value = Utility.Hash(password);
             var emailParam = command.CreateParameter();
             emailParam.ParameterName = "email";
             emailParam.Value = email;
@@ -110,7 +110,7 @@ namespace Kortyérzet.Services
             roleParam.ParameterName = "role";
             roleParam.Value = role;
 
-            command.CommandText = $"INSERT INTO users(username,user_password,email,user_role) VALUES (@username, @password, @email, @role)";
+            command.CommandText = $"INSERT INTO users(user_name,user_password,user_email,user_role) VALUES (@username, @password, @email, @role)";
             command.Parameters.Add(userNameParam);
             command.Parameters.Add(passwordParam);
             command.Parameters.Add(emailParam);
@@ -130,5 +130,6 @@ namespace Kortyérzet.Services
 
             return UserExist;
         }
+
     }
 }

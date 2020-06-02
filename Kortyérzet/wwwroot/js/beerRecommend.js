@@ -34,7 +34,7 @@ function onRecommendationReceived(response) {
 
         const aELbtn = document.createElement("a");
         aELbtn.classList.add("btn", "btn-primary", "btn-block");
-        aELbtn.href = '@Url.Action("BeerDetails", "Home", new { id = '+beer.id+' })'
+        aELbtn.href = `/Home/BeerDetails/${beer.id}`
         aELbtn.innerText = `${beer.name}`
 
         const pELtxt = document.createElement("p");

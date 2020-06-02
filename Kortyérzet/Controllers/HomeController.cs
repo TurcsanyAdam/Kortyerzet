@@ -26,14 +26,16 @@ namespace Kortyérzet.Controllers
         private readonly IBreweryService _breweryService;
         private readonly IStorageService _storageService;
         private readonly ICheckinService _checkinService;
+        private readonly ILoggerService _loggerService;
 
-        public HomeController(IUsersService userService, IBeerService beerService, IBreweryService breweryService, IStorageService storageService, ICheckinService checkinService)
+        public HomeController(IUsersService userService, IBeerService beerService, IBreweryService breweryService, IStorageService storageService, ICheckinService checkinService, ILoggerService loggerService)
         {
             _userService = userService;
             _beerService = beerService;
             _breweryService = breweryService;
             _storageService = storageService;
             _checkinService = checkinService;
+            _loggerService = loggerService;
         }
 
         public IActionResult Index()
@@ -63,6 +65,12 @@ namespace Kortyérzet.Controllers
         {
             return View();
         }
+        public IActionResult Log()
+        {
+
+            return View(_loggerService.GetAll());
+        }
+
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
@@ -135,6 +143,7 @@ namespace Kortyérzet.Controllers
 
                 _checkinService.InsertCheckin(userId,beerID,newCheckInText,newCheckInRating,fileName);
                 _beerService.UpdateRating(newCheckInRating, beerID);
+                _loggerService.LogActivity(userId, $"Check in with beer ID:{beerID}", DateTime.Now);
                 return RedirectToAction("Index");
 
             }
@@ -144,8 +153,17 @@ namespace Kortyérzet.Controllers
         public IActionResult Style()
         {
             string chosenSytle = Request.Form["chosenStyle"];
+            List<Beer> beerList = new List<Beer>();
+            if (chosenSytle.StartsWith("Select"))
+            {
+                beerList = _beerService.GetAll();
+            }
+            else
+            {
+                beerList = _beerService.GetAllByStyle(chosenSytle);
 
-            List<Beer> beerList = _beerService.GetAllByStyle(chosenSytle);
+            }
+
             List<BeerModel> beerModelList = new List<BeerModel>();
             foreach(Beer beer in beerList)
             {
@@ -236,6 +254,45 @@ namespace Kortyérzet.Controllers
 
                 }
                 _beerService.InsertBeer(newBeerName, fileName, newBeerStyle, newBeerDesc, newBeerBreweryABV, newBeerBreweryIBU, newBeerBreweryID);
+                _loggerService.LogActivity(userId, $"Add new beer with beer name:{newBeerName}", DateTime.Now);
+
+                return RedirectToAction("Index");
+
+            }
+
+            return View();
+        }
+
+        public IActionResult NewBrewery()
+        {
+            if (ModelState.IsValid)
+            {
+                var newBreweryData = Request.Form.ToList();
+                var userId = Convert.ToInt32(HttpContext.User.FindFirstValue("ID"));
+                string newBreweryName = Convert.ToString(newBreweryData[0].Value);
+                string fileName = null;
+                string newBreweryHQ = Convert.ToString(newBreweryData[1].Value);
+                string newBreweryDesc = Convert.ToString(newBreweryData[2].Value);
+
+
+
+
+                if (Request.Form.Files.Count > 0)
+                {
+                    IFormFile file = Request.Form.Files[0];
+                    if (file.Length > 0)
+                    {
+                        fileName = Path.GetFileName(file.FileName);
+
+                        using Stream imageStream = file.OpenReadStream();
+                        _storageService.Save(fileName, imageStream);
+
+                    }
+
+                }
+                _breweryService.InsertBeer(newBreweryName, fileName, newBreweryHQ, newBreweryDesc);
+                _loggerService.LogActivity(userId, $"Add new beer with brewery name:{newBreweryName}", DateTime.Now);
+
                 return RedirectToAction("Index");
 
             }

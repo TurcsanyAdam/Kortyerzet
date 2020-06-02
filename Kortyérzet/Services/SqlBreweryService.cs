@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Kortyérzet.Services
 {
-    public class SqlBreweryService : IBreweryService
+    public class SqlBreweryService : SqlBaseService,IBreweryService
     {
         private readonly IDbConnection _connection;
         private static Brewery ToBrewery(IDataReader reader)
@@ -75,6 +75,38 @@ namespace Kortyérzet.Services
 
             reader.Read();
             return ToBrewery(reader);
+        }
+        public void InsertBeer(string breweryName, string breweryLogo, string breweryHQ, string breweryDesc)
+        {
+            using var command = _connection.CreateCommand();
+
+            var breweryNameParam = command.CreateParameter();
+            breweryNameParam.ParameterName = "brewery_name";
+            breweryNameParam.Value = breweryName;
+
+            var breweryLogoParam = command.CreateParameter();
+            breweryLogoParam.ParameterName = "brewery_logo";
+            breweryLogoParam.Value = breweryLogo;
+
+            var breweryHQParam = command.CreateParameter();
+            breweryHQParam.ParameterName = "brewery_HQ";
+            breweryHQParam.Value = breweryHQ;
+
+            var breweryDescParam = command.CreateParameter();
+            breweryDescParam.ParameterName = "brewery_desc";
+            breweryDescParam.Value = breweryDesc;
+
+
+            command.CommandText = $"insert into brewery (brewery_name, brewery_logo, brewery_HQ, brewery_desc, brewery_beercount brewery_rating, brewery_timesRated, brewery_checkin) values" +
+                "(@brewery_name, @brewery_logo, @brewery_HQ, @brewery_desc,0, 0, 0, 0)";
+
+            command.Parameters.Add(breweryNameParam);
+            command.Parameters.Add(breweryLogoParam);
+            command.Parameters.Add(breweryHQParam);
+            command.Parameters.Add(breweryDescParam);
+
+
+            HandleExecuteNonQuery(command);
         }
     }
 }

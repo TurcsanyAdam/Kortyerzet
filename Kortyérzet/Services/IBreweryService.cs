@@ -12,5 +12,6 @@ namespace Kortyérzet.Services
         List<Brewery> GetAll();
         Brewery GetOne(int id);
         Brewery GetOne(string breweryName);
+        void InsertBeer(string breweryName, string breweryLogo, string breweryHQ, string breweryDesc);
     }
 }

@@ -1,4 +1,5 @@
-﻿DROP TABLE IF EXISTS checkin;
+﻿DROP TABLE IF EXISTS activity;
+DROP TABLE IF EXISTS checkin;
 DROP TABLE IF EXISTS beer;
 DROP TABLE IF EXISTS brewery;
 DROP TABLE IF EXISTS users;
@@ -47,6 +48,14 @@ CREATE TABLE checkin (
 
 );
 
+CREATE TABLE activity(
+    user_id INT REFERENCES users(user_id) on DELETE CASCADE,
+    user_activity VARCHAR(100) NOT NULL,
+	submission_time TIMESTAMP
+
+);
+
+
 INSERT INTO users(user_name, user_password, user_email, user_role) VALUES ('admin', '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918', 'admin@admin.com', 'admin');
 INSERT INTO users(user_name, user_password, user_email, user_role) VALUES ('test', '9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08', 'test@test.com', 'user');
 
@@ -74,3 +83,4 @@ insert into beer (beer_name, beer_logo, beer_style, beer_desc, beer_rating, beer
 insert into beer (beer_name, beer_logo, beer_style, beer_desc, beer_rating, beer_timesRated, beer_checkin, beer_abv, beer_ibu, brewery_ID) values ('Wine Flu', 'https://summer.cdn.shoprenter.hu/custom/summer/image/cache/w1000h1000wt1/product/dimbolab-wineflu.png?lastmod=1588165564.1580203359', 'Sour IPA', 'A slightly sour IPA fermented with riesling must and double dry hopped with nelson sauvin and amarillo', 0, 0, 0, 7.5, 56, 8);
 insert into beer (beer_name, beer_logo, beer_style, beer_desc, beer_rating, beer_timesRated, beer_checkin, beer_abv, beer_ibu, brewery_ID) values ('Ceylon Buddy', 'https://summer.cdn.shoprenter.hu/custom/summer/image/cache/w1000h1000wt1/product/hoptop-ceylonbuddy.png?lastmod=1588435254.1588180560', 'Tea infused DIPA', 'An imperial IPA with full body. Orange peels, sunflower petals and Ceylon tea provide complexity, but does not push over the balance.', 0, 0, 0, 9.1, 75, 9);
 insert into beer (beer_name, beer_logo, beer_style, beer_desc, beer_rating, beer_timesRated, beer_checkin, beer_abv, beer_ibu, brewery_ID) values ('Ultraside (Pineapple Version)', 'https://summer.cdn.shoprenter.hu/custom/summer/image/cache/w1000h1000wt1/product/yeastside-ultraside.png?lastmod=1588420419.1588180560', 'DIPA', 'Egy erős, ananászos Dupla IPA', 0, 0, 0, 9, 20, 10);
+

@@ -45,9 +45,17 @@ function onSearchResultReceived(response) {
         const divELdesc = document.createElement("div");
         divELdesc.classList.add("col-xl-6");
         const pELname = document.createElement("p");
-        pELname.textContent = `${beer.name}`;
+        pELname.style.fontSize = "xx-large"
+
+        const aELName = document.createElement("a");
+        aELName.href = `/Home/BeerDetails/${beer.id}`
+        aELName.textContent = `${beer.name}`;
+
+        pELname.appendChild(aELName)
+
         const pELbrew = document.createElement("p");
         pELbrew.textContent = `${beer.brewery.name}`;
+        pELbrew.style.fontSize = "x-large"
         const pELstyle = document.createElement("p");
         pELstyle.textContent = `${beer.style}`;
         const pELdesc = document.createElement("p");

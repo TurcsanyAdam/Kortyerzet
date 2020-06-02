@@ -1,0 +1,21 @@
+﻿@model IEnumerable<Kortyérzet.Domain.Log>
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+    <table style="width:100%">
+        <tr>
+            <th>User ID</th>
+            <th>Activity</th>
+            <th>Submission time</th>
+        </tr>
+        @foreach (var log in Model)
+        {
+            <tr>
+                <td>@log.UserID</td>
+                <td>@log.UserActivity</td>
+                <td>@log.SubmissionTime</td>
+            </tr>
+        }
+    </table>
+

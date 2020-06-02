@@ -96,6 +96,7 @@ namespace Kortyérzet
             services.AddScoped<IBreweryService, SqlBreweryService>();
             services.AddScoped<IUsersService, SqlUserService>();
             services.AddScoped<ICheckinService, SqlCheckinService>();
+            services.AddScoped<ILoggerService, SqlLoggerService>();
             services.AddScoped<IDbConnection>(_ =>
             {
                 var connection = new NpgsqlConnection(connectionString);
