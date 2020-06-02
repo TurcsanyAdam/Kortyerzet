@@ -1,31 +1,25 @@
-﻿
+﻿@model IEnumerable<Kortyérzet.Models.CheckinModel>
+
 @{
     ViewData["Title"] = "ProfileDetails";
 }
 
-    <h1>"Hello World"</h1>
-@*<div class="text-center">
-    <h1 class="display-4">Welcome, @Model.User.UserName</h1>
-</div>
-
-<div class="text-left m-5">
-    <table class="w-50 bg-light">
+<h1>"My beer library"</h1>
+<table style="width:100%">
+    <tr>
+        <th>Beer ID</th>
+        <th>Comment</th>
+        <th>Rating</th>
+        <th>Img</th>
+    </tr>
+    @foreach (var checkin in Model)
+    {
         <tr>
-            <td class="font-weight-bold">Id</td>
-            <td>@Model.User.UserId</td>
+            <td>@checkin.Beer.Name</td>
+            <td>@checkin.Checkin.Comment</td>
+            <td>@checkin.Checkin.Rating</td>
+            <td><img src="~/uploads/@checkin.Checkin.Img" height="150" width="150" /></td>
         </tr>
-        <tr>
-            <td class="font-weight-bold">E-mail</td>
-            <td>@Model.User.Email</td>
-        </tr>
-        <tr>
-            <td class="font-weight-bold">Registration Date</td>
-            <td>@Model.User.RegistrationTime</td>
-        </tr>
-        <tr>
-            <td class="font-weight-bold">Reputation</td>
-            <td>@Model.User.Reputation</td>
-        </tr>
-    </table>
-</div>*@
+    }
+</table>
 

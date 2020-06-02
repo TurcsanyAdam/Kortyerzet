@@ -97,7 +97,7 @@ namespace Kortyérzet.Services
             breweryDescParam.Value = breweryDesc;
 
 
-            command.CommandText = $"insert into brewery (brewery_name, brewery_logo, brewery_HQ, brewery_desc, brewery_beercount brewery_rating, brewery_timesRated, brewery_checkin) values" +
+            command.CommandText = $"insert into brewery (brewery_name, brewery_logo, brewery_HQ, brewery_desc, brewery_beercount, brewery_rating, brewery_timesRated, brewery_checkin) values" +
                 "(@brewery_name, @brewery_logo, @brewery_HQ, @brewery_desc,0, 0, 0, 0)";
 
             command.Parameters.Add(breweryNameParam);

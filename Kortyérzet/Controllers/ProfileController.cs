@@ -4,6 +4,8 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Kortyérzet.Domain;
+using Kortyérzet.Models;
+using Kortyérzet.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
@@ -14,25 +16,28 @@ namespace Kortyérzet.Controllers
     [Authorize]
     public class ProfileController : Controller
     {
-        public ProfileController()
+        private readonly ICheckinService _checkinService;
+        private readonly IBeerService _beerService;
+        public ProfileController(ICheckinService checkinService, IBeerService beerService)
         {
+            _checkinService = checkinService;
+            _beerService = beerService;
+
         }
 
         public IActionResult ProfileDetails()
         {
-            //var user = HttpContext.User;
-            //var claim = user.Claims.First(c => c.Type == ClaimTypes.Email);
-            //var email = claim.Value;
+            var userId = Convert.ToInt32(HttpContext.User.FindFirstValue("ID"));
+            List<CheckinModel> checkinModels = new List<CheckinModel>();
+            List<Checkin> checkins = _checkinService.GetAllByUserID(userId);
 
-            //User searchedUser = _loader.GetUserList($"Select * FROM users WHERE email = '{email}'")[0];
-            //List<QuestionModel> searchedQuestionsList = _loader.GetUserQuestions(searchedUser, "SELECT q.* FROM question q " +
-            //                                                            "LEFT JOIN answer a ON q.question_id = a.question_id " +
-            //                                                            $"WHERE q.userid = {searchedUser.UserId} " +
-            //                                                            $"OR a.userid = {searchedUser.UserId} " +
-            //                                                            "GROUP BY q.question_id; ");
-
-            //ProfileDetailsModel profileDetailModel = new ProfileDetailsModel(searchedUser, searchedQuestionsList);
-            return View();
+            foreach(Checkin checkin in checkins)
+            {
+                Beer beer = _beerService.GetOne(checkin.BeerID);
+                CheckinModel checkinModel = new CheckinModel(checkin, beer);
+                checkinModels.Add(checkinModel);
+            }
+            return View(checkinModels);
         }
     }
 }

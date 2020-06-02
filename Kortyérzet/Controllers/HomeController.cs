@@ -78,7 +78,7 @@ namespace Kortyérzet.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-        [Authorize(Roles = "admin")]
+        [Authorize]
         [HttpGet]
         public IActionResult BeerDetails(int id)
         {

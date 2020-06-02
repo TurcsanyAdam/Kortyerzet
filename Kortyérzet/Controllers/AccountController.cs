@@ -101,6 +101,10 @@ namespace Kortyérzet.Controllers
             }
 
         }
+        public IActionResult AccessDenied()
+        {
+            return RedirectToAction("Login");
+        }
     }
 
 }
